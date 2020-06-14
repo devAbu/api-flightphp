@@ -1,14 +1,50 @@
 <?php
 require '../vendor/autoload.php';
 
-	
-	//Flight::register('db', 'Database', array('localhost', 'sap', 'root', ''));
-Flight::register('db', 'PDO', array('mysql:host=localhost;dbname=sap', 'root', ''), function ($db) {
-        //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//Flight::register('db', 'Database', array('localhost', 'sap', 'root', ''));
+Flight::register('db', 'PDO', array('mysql:host=localhost;dbname=grbocovid', 'root', ''), function ($db) {
+	//$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 });
 
+Flight::route('GET /countries', function () {
+	$conn = Flight::db();
+	$data = $conn->query("SELECT id, continent, country_name, total,total-deaths-recovered as pending, recovered, deaths, (deaths / total) * 100 as deaths_rate, (recovered / total) * 100 as recovered_rate FROM covid_countries");
+	$count = $data->rowCount();
+	header('Content-type: application/json');
+	echo ("[");
+	$i = 0;
+	foreach ($data as $row) {
+		$object = json_encode($row);
+		echo $object;
+		if ($i < $count - 1) {
+			echo (",");
+		}
+		$i++;
+	}
 
+	echo ("]");
+});
+
+Flight::route('GET /graphs', function () {
+	$conn = Flight::db();
+	$data = $conn->query("SELECT continent, sum(recovered), sum(deaths) FROM covid_countries group by continent");
+	$count = $data->rowCount();
+	header('Content-type: application/json');
+	echo ("[");
+	$i = 0;
+	foreach ($data as $row) {
+		$object = json_encode($row);
+		echo $object;
+		if ($i < $count - 1) {
+			echo (",");
+		}
+		$i++;
+	}
+
+	echo ("]");
+});
 
 Flight::route('/vijest', function () {
 	$conn = Flight::db();
@@ -263,9 +299,6 @@ Flight::route('/ocjenaUpdate/@id', function ($id) {
 	} else {
 		$data = $conn->query("UPDATE ocjena SET dislikes = dislikes+1 where lokalID = ($id)");
 	}
-
 });
 
 Flight::start();
-
-?>

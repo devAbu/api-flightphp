@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous">
+  </script>
+  <script src="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+  </script>
+  <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="//code.highcharts.com/highcharts.js"></script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Midterm Exam</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container theme-showcase" role="main">
+
+    <div class="jumbotron">
+      <h1>Welcome to Midterm Exam at course Introduction to Web Programming</h1>
+      <p>This is skeleton project to save you time on exam. You have to populate missing snippet codes to make this
+        project functional </p>
+
+      <h3>Following parts should be completed:</h3>
+
+      <ul>
+        <li>1. Connection to MySQL database in rest/index.php file per TODO instructions in the file</li>
+        <li>2. REST endpoint rest/countries in rest/index.php file per TODO instructions in the file</li>
+        <li>3. REST endpoint rest/graphs in rest/index.php file per TODO instructions in the file</li>
+        <li>4. Ajax Call to rest/countries endpoint from index.html file per TODO intructions in the file</li>
+        <li>5. Ajax Call to rest/graphs endpoint from index.html file per TODO intructions in the file</li>
+      </ul>
+    </div>
+
+    <div class="page-header">
+      <h1>COVID-19 Report per country</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table id="countries-table" class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Continent</th>
+              <th>Country Name</th>
+              <th>Total Cases</th>
+              <th>Pending</th>
+              <th>Recovered</th>
+              <th>Deaths</th>
+              <th>Deaths Rate</th>
+              <th>Recovery Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h1>Distribution per Continent</h1>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Recovery Distribution Per Continent</h3>
+          </div>
+          <div class="panel-body">
+            <div id="recovery-dist-per-continent-pie"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Death Distribution Per Continent</h3>
+          </div>
+          <div class="panel-body">
+            <div id="death-dist-per-continent-pie"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <script>
+    /** TODO implement ajax call to call GET method rest/countries and populate table with id #countries-table
+     * Using JSON data from endpoint populate table's HTML content and transform table into DataTable
+     */
+
+    $.ajax({
+      url: "rest/countries",
+      success: function (data) {
+        var items = [];
+        $.each(data, function (key, value) {
+          console.log(value['id'])
+          items.push("<tr><td>" + value['id'] + "</td><td>" + value['continent'] + "</td><td>" + value[
+              'country_name'] + "</td><td>" + value['total'] + "</td><td>" + value['pending'] +
+            "</td><td>" + value[
+              'recovered'] + "</td><td>" + value['deaths'] +
+            "</td><td>" + value['deaths_rate'] + "</td><td>" + value['recovered_rate'] + "</td></tr>");
+        })
+
+        $('tbody').append(items)
+      },
+      error: function (data, err) {
+        toastr.error("Error occurred, please try again later.")
+      }
+    })
+
+
+    /** TODO implement ajax call to call GET method rest/graphs and using HighCharts library to create
+     * two pie charts in div elements with ids #recovery-dist-per-continent-pie and #death-dist-per-continent-pie
+     */
+  </script>
+</body>
+
+</html>
